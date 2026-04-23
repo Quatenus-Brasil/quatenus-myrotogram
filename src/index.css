@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&display=swap");
+
+:root {
+  --primary: #f36e21;
+  --secondary: #00968f;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  padding-top: 0;
+  text-align: center;
+}
+
+* {
+  font-family: "Nunito";
+  /* outline: red solid 1px; */
+}
+
+body {
+  background: #f1f1f1;
+  margin: 0;
+}

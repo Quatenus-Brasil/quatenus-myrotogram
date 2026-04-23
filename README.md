@@ -1,1 +1,0 @@
-# quatenus-myrotogram
