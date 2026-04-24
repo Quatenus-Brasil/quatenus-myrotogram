@@ -84,6 +84,7 @@ function App() {
     const longsAndLatsArray = data.map((row) => `${normalize(row.Longitude)},${normalize(row.Latitude)}`);
     const longsAndLatsString = longsAndLatsArray.join(",");
     setLongsAndLats(longsAndLatsString);
+    setEndPoint(data.length);
     // console.log("Longs and Lats String:", longsAndLatsString);
   };
 
