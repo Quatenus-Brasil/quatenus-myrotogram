@@ -39,10 +39,26 @@ function App() {
   };
 
   const validateCheckInterval = (value) => {
-    if (value < 5) {
+    if (value < 5 || value > 86400) {
       setCheckInterval(0);
     } else {
       setCheckInterval(value);
+    }
+  };
+
+  const validateDuration = (value) => {
+    if (value < 0 || value > 255) {
+      setDuration(0);
+    } else {
+      setDuration(value);
+    }
+  };
+
+  const validateToggleTimes = (value) => {
+    if (value < 0 || value > 255) {
+      setToggleTimes(0);
+    } else {
+      setToggleTimes(value);
     }
   };
 
@@ -58,13 +74,18 @@ function App() {
     if (!file) {
       alert("Por favor, selecione um arquivo CSV primeiro.");
       return;
-    };
+    }
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
         if (results.data.length < 3) {
-          alert("O CSV deve conter pelo menos 3 pontos de 'Latitude' e 'Longitude'.");
+          alert("A área deve conter pelo menos 3 pontos de 'Latitude' e 'Longitude'.");
+          return;
+        }
+
+        if (results.data.length > 10) {
+          alert("A área não pode conter mais de 10 pontos de 'Latitude' e 'Longitude'.");
           return;
         }
 
@@ -83,8 +104,8 @@ function App() {
     const normalize = (val) => parseFloat(val.trim().replace(",", ".")).toFixed(6);
     const longsAndLatsArray = data.map((row) => `${normalize(row.Longitude)},${normalize(row.Latitude)}`);
     const longsAndLatsString = longsAndLatsArray.join(",");
-    setLongsAndLats(longsAndLatsString);
     setEndPoint(data.length);
+    setLongsAndLats(longsAndLatsString);
     // console.log("Longs and Lats String:", longsAndLatsString);
   };
 
@@ -216,12 +237,12 @@ function App() {
 
                 <div className="col-md-6">
                   <label className="form-label-custom d-block">Duration (x100ms)</label>
-                  <input type="number" className="form-control form-control-sm" defaultValue={0} min={0} onChange={(e) => setDuration(e.target.value)} />
+                  <input type="number" className="form-control form-control-sm" value={duration} defaultValue={0} min={0} onChange={(e) => validateDuration(e.target.value)} />
                 </div>
 
                 <div className="col-12">
                   <label className="form-label-custom d-block">Toggle Times</label>
-                  <input type="number" className="form-control form-control-sm" defaultValue={0} min={0} onChange={(e) => setToggleTimes(e.target.value)} />
+                  <input type="number" className="form-control form-control-sm" value={toggleTimes} defaultValue={0} min={0} onChange={(e) => validateToggleTimes(e.target.value)} />
                 </div>
 
                 {/* <div className="col-12">
