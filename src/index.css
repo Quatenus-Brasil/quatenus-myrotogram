@@ -1,21 +1,200 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap");
 
 :root {
   --primary: #f36e21;
   --secondary: #00968f;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  padding-top: 0;
-  text-align: center;
 }
 
 * {
-  font-family: "Nunito";
-  /* outline: red solid 1px; */
+  font-family: "Nunito", sans-serif;
 }
 
 body {
   background: #f1f1f1;
   margin: 0;
+}
+
+.navbar-brand-logo {
+  height: 36px;
+}
+
+.page-header {
+  padding: 1.25rem 0 0.75rem;
+}
+
+.page-header h5 {
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+  color: #1a1a1a;
+}
+
+.page-header p {
+  margin: 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.card-section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  height: 100%;
+}
+
+.card-section-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.card-section-title .icon {
+  color: var(--primary);
+}
+
+.card-section-subtitle {
+  font-size: 0.85rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 2rem 1rem;
+  text-align: center;
+  background: #fafafa;
+  margin-bottom: 1rem;
+}
+
+.dropzone-icon {
+  font-size: 2rem;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+}
+
+.dropzone p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #555;
+}
+
+.dropzone span {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.btn-file-upload {
+  display: inline-block;
+  cursor: pointer;
+  padding: 0.3rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 0.85rem;
+  color: #333;
+  margin-top: 0.25rem;
+}
+
+.btn-file-upload:hover {
+  background: #f0f0f0;
+}
+
+.btn-primary-custom {
+  background-color: var(--primary);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  width: 100%;
+  padding: 0.65rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.btn-primary-custom:hover {
+  background-color: #d95e15;
+}
+
+.btn-secondary-custom {
+  background-color: var(--secondary);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  width: 100%;
+  padding: 0.65rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.btn-secondary-custom:hover {
+  background-color: #007a74;
+}
+
+.form-label-custom {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.generated-section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.generated-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.generated-title {
+  font-weight: 700;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1a1a1a;
+}
+
+.btn-copy {
+  background: transparent;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #333;
+}
+
+.btn-copy:hover {
+  background: #f0f0f0;
+}
+
+.terminal-box {
+  background: #1a1a2e;
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  font-family: "Courier New", monospace;
+  font-size: 0.95rem;
+  color: #e2e2e2;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.6rem;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
