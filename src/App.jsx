@@ -8,19 +8,16 @@ function App() {
   const selectedFileRef = useRef(null);
 
   const [equipament, setEquipment] = useState("gv300");
-  const [geoid, setGeoid] = useState("0");
   const [mode, setMode] = useState("0");
-  const [startPoint, setStartPoint] = useState(1);
-  const [endPoint, setEndPoint] = useState(3);
-  const [longsAndLats, setLongsAndLats] = useState(",,,,,");
+  const [startPoint] = useState(1);
   const [checkInterval, setCheckInterval] = useState(0);
   const [outputId, setOutputId] = useState("0");
   const [outputStatus, setOutputStatus] = useState("0");
   const [duration, setDuration] = useState(0);
   const [toggleTimes, setToggleTimes] = useState(0);
+  const [areas, setAreas] = useState([]);
 
-  const copyToClipboard = () => {
-    const command = `AT+GTPEO=${equipament},${geoid},${mode},${startPoint},${endPoint},${longsAndLats},${checkInterval},${outputId},${outputStatus},${duration},${toggleTimes},,,,,FFFF$`;
+  const copyToClipboard = (command) => {
     const textarea = document.createElement("textarea");
     textarea.value = command;
     textarea.style.position = "fixed";
@@ -79,34 +76,46 @@ function App() {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        if (results.data.length < 3) {
-          alert("A área deve conter pelo menos 3 pontos de 'Latitude' e 'Longitude'.");
+        const grouped = new Map();
+        for (const row of results.data) {
+          const id = row.Id?.trim();
+          if (!id) continue;
+          if (!grouped.has(id)) grouped.set(id, []);
+          grouped.get(id).push(row);
+        }
+
+        if (grouped.size > 16) {
+          alert("O arquivo não pode conter mais de 16 áreas.");
           return;
         }
 
-        if (results.data.length > 10) {
-          alert("A área não pode conter mais de 10 pontos de 'Latitude' e 'Longitude'.");
-          return;
+        const normalize = (val) => parseFloat(val.trim().replace(",", ".")).toFixed(6);
+        const parsedAreas = [];
+
+        for (const [id, rows] of grouped) {
+          if (rows.length < 3) {
+            alert(`A área '${id}' deve conter pelo menos 3 pontos.`);
+            return;
+          }
+          if (rows.length > 10) {
+            alert(`A área '${id}' não pode conter mais de 10 pontos.`);
+            return;
+          }
+          if (rows.some((row) => !row.Latitude?.trim() || !row.Longitude?.trim())) {
+            alert(`Todos os pontos da área '${id}' devem ter 'Latitude' e 'Longitude'.`);
+            return;
+          }
+
+          const longsAndLatsString = rows
+            .map((row) => `${normalize(row.Longitude)},${normalize(row.Latitude)}`)
+            .join(",");
+
+          parsedAreas.push({ id, geoid: parsedAreas.length, endPoint: rows.length, longsAndLats: longsAndLatsString });
         }
 
-        if (results.data.some((row) => !row.Latitude?.trim() || !row.Longitude?.trim())) {
-          alert("Todos os pontos devem ter uma 'Latitude' e 'Longitude'.");
-          return;
-        }
-
-        // console.log("Parsed Result:", results.data);
-        getLongsAndLats(results.data);
+        setAreas(parsedAreas);
       },
     });
-  };
-
-  const getLongsAndLats = (data) => {
-    const normalize = (val) => parseFloat(val.trim().replace(",", ".")).toFixed(6);
-    const longsAndLatsArray = data.map((row) => `${normalize(row.Longitude)},${normalize(row.Latitude)}`);
-    const longsAndLatsString = longsAndLatsArray.join(",");
-    setEndPoint(data.length);
-    setLongsAndLats(longsAndLatsString);
-    // console.log("Longs and Lats String:", longsAndLatsString);
   };
 
   return (
@@ -165,32 +174,6 @@ function App() {
                 </div>
 
                 <div className="col-md-6">
-                  <label className="form-label-custom d-block">GEOID</label>
-                  <select className="form-select form-select-sm" defaultValue="0" onChange={(e) => setGeoid(e.target.value)}>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6">
                   <label className="form-label-custom d-block">MODE</label>
                   <select className="form-select form-select-sm" defaultValue="0" onChange={(e) => setMode(e.target.value)}>
                     <option value="0">Desativar a função de cerca</option>
@@ -240,7 +223,7 @@ function App() {
                   <input type="number" className="form-control form-control-sm" value={duration} defaultValue={0} min={0} onChange={(e) => validateDuration(e.target.value)} />
                 </div>
 
-                <div className="col-12">
+                <div className="col-md-6">
                   <label className="form-label-custom d-block">Toggle Times</label>
                   <input type="number" className="form-control form-control-sm" value={toggleTimes} defaultValue={0} min={0} onChange={(e) => validateToggleTimes(e.target.value)} />
                 </div>
@@ -255,22 +238,35 @@ function App() {
           </div>
         </div>
 
-        <div className="generated-section">
-          <div className="generated-header">
-            <div className="generated-title">
-              <span style={{ color: "var(--primary)" }}>&#9636;</span>
-              Comando
+        {areas.length === 0 ? (
+          <div className="generated-section">
+            <div className="generated-header">
+              <div className="generated-title">
+                <span style={{ color: "var(--primary)" }}>&#9636;</span>
+                Comandos
+              </div>
             </div>
-            <button type="button" className="btn-copy" onClick={copyToClipboard}>
-              &#9946; Copiar
-            </button>
+            <p style={{ color: "#888", fontSize: "0.9rem", margin: 0 }}>Faça upload e processe um arquivo CSV para gerar os comandos.</p>
           </div>
-
-          <div className="terminal-box">
-            AT+GTPEO={equipament},{geoid},{mode},{startPoint},{endPoint},{longsAndLats},{checkInterval},{outputId},{outputStatus},{duration},{toggleTimes}
-            ,,,,,FFFF$
-          </div>
-        </div>
+        ) : (
+          areas.map((area) => {
+            const command = `AT+GTPEO=${equipament},${area.geoid},${mode},${startPoint},${area.endPoint},${area.longsAndLats},${checkInterval},${outputId},${outputStatus},${duration},${toggleTimes},,,,,FFFF$`;
+            return (
+              <div key={area.id} className="generated-section" style={{ marginBottom: "1rem" }}>
+                <div className="generated-header">
+                  <div className="generated-title">
+                    <span style={{ color: "var(--primary)" }}>&#9636;</span>
+                    Área {area.id} &mdash; GeoId: {area.geoid}
+                  </div>
+                  <button type="button" className="btn-copy" onClick={() => copyToClipboard(command)}>
+                    &#9946; Copiar
+                  </button>
+                </div>
+                <div className="terminal-box">{command}</div>
+              </div>
+            );
+          })
+        )}
       </div>
     </>
   );
