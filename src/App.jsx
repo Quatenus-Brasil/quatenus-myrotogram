@@ -7,14 +7,14 @@ function App() {
   const fileInputRef = useRef(null);
   const selectedFileRef = useRef(null);
 
-  const [equipament, setEquipment] = useState("gv300");
-  const [mode, setMode] = useState("0");
+  const [equipment, setEquipment] = useState("gv300");
+  const [mode, setMode] = useState("3");
   const [startPoint] = useState(1);
-  const [checkInterval, setCheckInterval] = useState(0);
-  const [outputId, setOutputId] = useState("0");
-  const [outputStatus, setOutputStatus] = useState("0");
-  const [duration, setDuration] = useState(0);
-  const [toggleTimes, setToggleTimes] = useState(0);
+  const [checkInterval, setCheckInterval] = useState(5);
+  const [outputId, setOutputId] = useState("2");
+  const [outputStatus, setOutputStatus] = useState("1");
+  const [duration, setDuration] = useState(2);
+  const [toggleTimes, setToggleTimes] = useState(1);
   const [areas, setAreas] = useState([]);
 
   const copyToClipboard = (command) => {
@@ -106,9 +106,7 @@ function App() {
             return;
           }
 
-          const longsAndLatsString = rows
-            .map((row) => `${normalize(row.Longitude)},${normalize(row.Latitude)}`)
-            .join(",");
+          const longsAndLatsString = rows.map((row) => `${normalize(row.Longitude)},${normalize(row.Latitude)}`).join(",");
 
           parsedAreas.push({ id, geoid: parsedAreas.length, endPoint: rows.length, longsAndLats: longsAndLatsString });
         }
@@ -167,7 +165,7 @@ function App() {
               <div className="row g-3 mt-1">
                 <div className="col-md-12">
                   <label className="form-label-custom d-block">EQUIPAMENTO</label>
-                  <select className="form-select form-select-sm" defaultValue="gv300" onChange={(e) => setEquipment(e.target.value)}>
+                  <select className="form-select form-select-sm" value={equipment} onChange={(e) => setEquipment(e.target.value)}>
                     <option value="gv300">GV300N</option>
                     <option value="gv350m">GV350MG</option>
                   </select>
@@ -175,11 +173,11 @@ function App() {
 
                 <div className="col-md-6">
                   <label className="form-label-custom d-block">MODE</label>
-                  <select className="form-select form-select-sm" defaultValue="0" onChange={(e) => setMode(e.target.value)}>
-                    <option value="0">Desativar a função de cerca</option>
-                    <option value="1">Entrando na cerca</option>
-                    <option value="2">Saindo da cerca</option>
-                    <option value="3">Entrando e saindo da cerca</option>
+                  <select className="form-select form-select-sm" value={mode} onChange={(e) => setMode(e.target.value)}>
+                    <option value="3">Notificar entrada e saída da área</option>
+                    <option value="1">Entrando na área</option>
+                    <option value="2">Saindo da área</option>
+                    <option value="0">Desativar a função de área</option>
                   </select>
                 </div>
 
@@ -188,7 +186,6 @@ function App() {
                   <input
                     type="number"
                     className="form-control form-control-sm"
-                    defaultValue={0}
                     min={5}
                     value={checkInterval}
                     onInput={(e) => validateCheckInterval(e.target.value)}
@@ -197,7 +194,7 @@ function App() {
 
                 <div className="col-md-6">
                   <label className="form-label-custom d-block">Output ID</label>
-                  <select className="form-select form-select-sm" defaultValue="0" onChange={(e) => setOutputId(e.target.value)}>
+                  <select className="form-select form-select-sm" value={outputId} onChange={(e) => setOutputId(e.target.value)}>
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -211,7 +208,7 @@ function App() {
 
                 <div className="col-md-6">
                   <label className="form-label-custom d-block">Output Status</label>
-                  <select className="form-select form-select-sm" defaultValue="0" onChange={(e) => setOutputStatus(e.target.value)}>
+                  <select className="form-select form-select-sm" value={outputStatus} onChange={(e) => setOutputStatus(e.target.value)}>
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -220,19 +217,19 @@ function App() {
 
                 <div className="col-md-6">
                   <label className="form-label-custom d-block">Duration (x100ms)</label>
-                  <input type="number" className="form-control form-control-sm" value={duration} defaultValue={0} min={0} onChange={(e) => validateDuration(e.target.value)} />
+                  <input type="number" className="form-control form-control-sm" value={duration} min={0} onChange={(e) => validateDuration(e.target.value)} />
                 </div>
 
                 <div className="col-md-6">
                   <label className="form-label-custom d-block">Toggle Times</label>
-                  <input type="number" className="form-control form-control-sm" value={toggleTimes} defaultValue={0} min={0} onChange={(e) => validateToggleTimes(e.target.value)} />
+                  <input
+                    type="number"
+                    className="form-control form-control-sm"
+                    value={toggleTimes}
+                    min={0}
+                    onChange={(e) => validateToggleTimes(e.target.value)}
+                  />
                 </div>
-
-                {/* <div className="col-12">
-                  <button type="button" className="btn-primary-custom mt-1">
-                    &#9654; Gerar String
-                  </button>
-                </div> */}
               </div>
             </div>
           </div>
@@ -250,7 +247,7 @@ function App() {
           </div>
         ) : (
           areas.map((area) => {
-            const command = `AT+GTPEO=${equipament},${area.geoid},${mode},${startPoint},${area.endPoint},${area.longsAndLats},${checkInterval},${outputId},${outputStatus},${duration},${toggleTimes},,,,,FFFF$`;
+            const command = `AT+GTPEO=${equipment},${area.geoid},${mode},${startPoint},${area.endPoint},${area.longsAndLats},${checkInterval},${outputId},${outputStatus},${duration},${toggleTimes},,,,,FFFF$`;
             return (
               <div key={area.id} className="generated-section" style={{ marginBottom: "1rem" }}>
                 <div className="generated-header">
