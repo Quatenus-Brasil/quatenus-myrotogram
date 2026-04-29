@@ -186,7 +186,6 @@ function App() {
                   <input
                     type="number"
                     className="form-control form-control-sm"
-                    min={5}
                     value={checkInterval}
                     onInput={(e) => validateCheckInterval(e.target.value)}
                   />
@@ -217,7 +216,7 @@ function App() {
 
                 <div className="col-md-6">
                   <label className="form-label-custom d-block">Duration (x100ms)</label>
-                  <input type="number" className="form-control form-control-sm" value={duration} min={0} onChange={(e) => validateDuration(e.target.value)} />
+                  <input type="number" className="form-control form-control-sm" value={duration} onChange={(e) => validateDuration(e.target.value)} />
                 </div>
 
                 <div className="col-md-6">
@@ -226,7 +225,6 @@ function App() {
                     type="number"
                     className="form-control form-control-sm"
                     value={toggleTimes}
-                    min={0}
                     onChange={(e) => validateToggleTimes(e.target.value)}
                   />
                 </div>
