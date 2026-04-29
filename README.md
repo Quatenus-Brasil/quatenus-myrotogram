@@ -35,9 +35,7 @@ React e Bootstrap
 
 ## Pré-requisitos
 
-- Node.js 20.19+, 22.12+
-- npm
-- Conta ativa no Quatenus GTI
+- Node.js (20.19+ ou 22.12+)
 
 ## Instalação e execução
 
