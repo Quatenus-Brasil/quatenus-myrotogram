@@ -15,6 +15,20 @@ Com o MyRotogram, é só baixar as áreas direto da plataforma GTI e gerar o com
 
 Dessa maneira conseguimos reduzir a probabilidade de erros na configuração e também o tempo necessário para entregar o produto ao cliente.
 
+## Como usar
+
+A utilização do MyRotogram é bem simples:
+1. Acesse a plataforma do cliente no GTI,
+2. Vá em Gerir > Importar / Exportar > Exportar > Exportação de áreas de interesse.
+3. Selecione a área ou áreas que quer colocar dentro do dispositivo
+4. Clique em Exportar (o formato do arquivo deve ser .csv).
+
+Depois de baixar o arquivo (Exportação de pontos de áreas de interesse.csv), acesse o MyRotogram e clique em "Procurar", selecione o arquivo e depois clique em processar.
+
+Caso você não tenha acessa a plataforma GTI, na raiz do projeto tem um arquivo .csv de exemplo.
+
+https://github.com/user-attachments/assets/66c4f7b6-02d9-4d7f-a80a-da223903e92d
+
 ## Stack utilizada
 
 React e Bootstrap
