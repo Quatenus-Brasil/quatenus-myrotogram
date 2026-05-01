@@ -1,6 +1,6 @@
 ![Logo](https://i.imgur.com/YjpDUlB.png)
 
-O Quatenus MyRotogram é uma ferramenta interna da Quatenus Brasil, usada para facilitar a configuração de cercas do produto Rotograma.
+O Quatenus MyRotogram é uma ferramenta interna da Quatenus Brasil, usada para facilitar a criação dos comandos de configuração das cercas do produto Rotograma. 
 
 ## Por que?
 
